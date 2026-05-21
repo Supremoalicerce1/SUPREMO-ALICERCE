@@ -1,0 +1,2437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supremo Alicerce — IA para Construção Civil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --black:    #03060F;
+  --deep:     #060D1C;
+  --card:     #0A1628;
+  --card2:    #0E1C34;
+  --cyan:     #00D4FF;
+  --cyan2:    #00FFCC;
+  --blue:     #1A7FFF;
+  --blue2:    #4A9FFF;
+  --purple:   #7B5EA7;
+  --gold:     #F0B429;
+  --green:    #22D98A;
+  --grey:     #4A5568;
+  --grey2:    #8892A4;
+  --white:    #E8EFF8;
+  --font-h:   'Orbitron', monospace;
+  --font-b:   'Syne', sans-serif;
+  --font-m:   'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-b);
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 2px; }
+
+/* ── UTILITIES ── */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+.container-sm { max-width: 760px; margin: 0 auto; padding: 0 28px; }
+.mono { font-family: var(--font-m); }
+.cyan { color: var(--cyan); }
+
+/* ─────────────── TOPBAR ─────────────── */
+.topbar {
+  background: linear-gradient(90deg, var(--blue) 0%, var(--cyan) 50%, var(--blue) 100%);
+  background-size: 200% 100%;
+  animation: gradShift 4s linear infinite;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--black);
+  text-transform: uppercase;
+}
+@keyframes gradShift {
+  0%{background-position:0% 50%}
+  100%{background-position:200% 50%}
+}
+
+/* ─────────────── NAV ─────────────── */
+nav {
+  padding: 18px 0;
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(3,6,15,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,212,255,0.1);
+}
+.nav-inner { display:flex;align-items:center;justify-content:space-between; }
+.nav-logo {
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-h);font-size:16px;
+  letter-spacing:0.1em;color:var(--white);
+  text-decoration:none;
+}
+.nav-logo-mark {
+  width:36px;height:36px;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;color:var(--black);
+  font-family:var(--font-h);
+  box-shadow:0 0 16px rgba(0,212,255,0.4);
+}
+.nav-cta {
+  background:transparent;
+  border:1px solid var(--cyan);
+  color:var(--cyan);
+  font-family:var(--font-m);
+  font-size:12px;font-weight:500;
+  letter-spacing:0.08em;
+  padding:10px 22px;border-radius:4px;
+  cursor:pointer;transition:all 0.3s;
+  text-decoration:none;text-transform:uppercase;
+}
+.nav-cta:hover {
+  background:var(--cyan);color:var(--black);
+  box-shadow:0 0 20px rgba(0,212,255,0.5);
+}
+
+/* ─────────────── HERO ─────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 80px 0 60px;
+}
+
+/* Animated grid background */
+.hero-grid {
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events:none;
+  animation: gridPulse 8s ease-in-out infinite;
+}
+@keyframes gridPulse {
+  0%,100%{opacity:0.6}
+  50%{opacity:1}
+}
+
+/* Glow orbs */
+.hero-orb-1 {
+  position:absolute;top:-200px;right:-100px;
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(0,212,255,0.08) 0%,transparent 65%);
+  pointer-events:none;
+  animation:orbFloat 10s ease-in-out infinite;
+}
+.hero-orb-2 {
+  position:absolute;bottom:-300px;left:-100px;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(26,127,255,0.07) 0%,transparent 65%);
+  pointer-events:none;
+  animation:orbFloat 13s ease-in-out infinite reverse;
+}
+@keyframes orbFloat {
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(30px,-40px) scale(1.05);}
+}
+
+.hero-layout {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:64px;
+  align-items:center;
+  width:100%;
+}
+
+.hero-badge {
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,212,255,0.08);
+  border:1px solid rgba(0,212,255,0.2);
+  color:var(--cyan);
+  font-family:var(--font-m);
+  font-size:10px;font-weight:500;letter-spacing:0.15em;
+  text-transform:uppercase;
+  padding:6px 14px;border-radius:2px;
+  margin-bottom:24px;
+}
+.hero-badge span { animation:blink 2s step-end infinite; }
+@keyframes blink {0%,100%{opacity:1}50%{opacity:0}}
+
+.hero h1 {
+  font-family:var(--font-h);
+  font-size:clamp(32px,4.5vw,60px);
+  line-height:1.1;
+  letter-spacing:0.04em;
+  color:var(--white);
+  margin-bottom:20px;
+}
+.hero h1 .hl {
+  background:linear-gradient(90deg,var(--cyan),var(--blue2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  display:block;
+}
+.hero h1 .outline {
+  -webkit-text-stroke:1px rgba(0,212,255,0.4);
+  color:transparent;
+  display:block;
+}
+
+.hero-sub {
+  font-size:17px;font-weight:300;line-height:1.65;
+  color:var(--grey2);
+  margin-bottom:36px;
+  max-width:480px;
+}
+.hero-sub strong { color:var(--white);font-weight:500; }
+
+.hero-ctas {
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:48px;flex-wrap:wrap;
+}
+
+.btn-primary {
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  color:var(--black);font-weight:700;
+  font-family:var(--font-m);
+  font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:16px 32px;border-radius:4px;
+  border:none;cursor:pointer;
+  transition:all 0.3s;text-decoration:none;
+  position:relative;overflow:hidden;
+}
+.btn-primary::before {
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.2) 0%,transparent 60%);
+}
+.btn-primary:hover {
+  transform:translateY(-3px);
+  box-shadow:0 16px 48px rgba(0,212,255,0.4);
+}
+
+.btn-ghost {
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;
+  color:var(--grey2);
+  font-family:var(--font-m);
+  font-size:12px;letter-spacing:0.06em;
+  padding:16px 8px;
+  border:none;cursor:pointer;
+  transition:color 0.2s;text-decoration:none;
+}
+.btn-ghost:hover { color:var(--white); }
+
+.hero-social-proof {
+  display:flex;align-items:center;gap:14px;
+}
+.avatares { display:flex; }
+.avatar {
+  width:34px;height:34px;border-radius:50%;
+  border:2px solid var(--black);
+  margin-left:-8px;
+  font-family:var(--font-h);font-size:10px;
+  display:flex;align-items:center;justify-content:center;
+  color:white;
+}
+.avatar:first-child{margin-left:0;}
+.proof-text { font-size:12px;color:var(--grey); }
+.proof-text strong { color:var(--white); }
+.stars { color:var(--gold);font-size:13px;margin-bottom:2px; }
+
+/* ─────────────── 3D AR CANVAS HERO ─────────────── */
+.hero-visual {
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  contain: layout;
+}
+
+#ar-canvas {
+  width:100%;
+  max-width:560px;
+  height:460px;
+  border-radius:12px;
+  position:relative;
+  cursor:crosshair;
+}
+
+.ar-frame {
+  width:100%;
+  height:100%;
+  position:relative;
+  perspective:1000px;
+  perspective-origin:50% 50%;
+}
+
+.ar-scene {
+  width:100%;height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.08s ease-out;
+  will-change:transform;
+}
+
+/* AR Headset shape */
+.ar-headset {
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:480px;height:280px;
+}
+
+.ar-body {
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:440px;height:160px;
+  border:2px solid rgba(0,212,255,0.3);
+  border-radius:80px;
+  background:linear-gradient(135deg,rgba(6,13,28,0.9),rgba(10,22,40,0.95));
+  box-shadow:
+    0 0 40px rgba(0,212,255,0.12),
+    inset 0 0 40px rgba(0,212,255,0.04),
+    0 4px 60px rgba(0,0,0,0.8);
+}
+
+/* Left lens */
+.ar-lens-l {
+  position:absolute;
+  top:50%;left:26%;
+  transform:translate(-50%,-50%);
+  width:154px;height:96px;
+  border:1.5px solid rgba(0,212,255,0.5);
+  border-radius:50%;
+  overflow:hidden;
+  box-shadow:
+    0 0 20px rgba(0,212,255,0.3),
+    inset 0 0 20px rgba(0,212,255,0.05);
+}
+
+/* Right lens */
+.ar-lens-r {
+  position:absolute;
+  top:50%;left:74%;
+  transform:translate(-50%,-50%);
+  width:154px;height:96px;
+  border:1.5px solid rgba(0,212,255,0.5);
+  border-radius:50%;
+  overflow:hidden;
+  box-shadow:
+    0 0 20px rgba(0,212,255,0.3),
+    inset 0 0 20px rgba(0,212,255,0.05);
+}
+
+/* Wireframe construction inside lens */
+.lens-content {
+  width:100%;height:100%;
+  position:relative;
+  background:radial-gradient(ellipse at center, rgba(0,30,60,0.95), rgba(0,10,25,0.98));
+  overflow:hidden;
+}
+
+.lens-content canvas {
+  width:100%;height:100%;
+}
+
+/* Nose bridge */
+.ar-bridge {
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:36px;height:12px;
+  border-top:2px solid rgba(0,212,255,0.4);
+  border-radius:50% 50% 0 0;
+}
+
+/* HUD elements on lens */
+.hud-corner {
+  position:absolute;width:16px;height:16px;
+}
+.hud-corner.tl { top:4px;left:4px;border-top:1.5px solid var(--cyan);border-left:1.5px solid var(--cyan); }
+.hud-corner.tr { top:4px;right:4px;border-top:1.5px solid var(--cyan);border-right:1.5px solid var(--cyan); }
+.hud-corner.bl { bottom:4px;left:4px;border-bottom:1.5px solid var(--cyan);border-left:1.5px solid var(--cyan); }
+.hud-corner.br { bottom:4px;right:4px;border-bottom:1.5px solid var(--cyan);border-right:1.5px solid var(--cyan); }
+
+/* Status line inside lens */
+.hud-status {
+  position:absolute;bottom:8px;left:0;right:0;
+  text-align:center;
+  font-family:var(--font-m);
+  font-size:8px;
+  color:rgba(0,212,255,0.7);
+  letter-spacing:0.12em;
+  animation:hudBlink 3s ease-in-out infinite;
+}
+@keyframes hudBlink {
+  0%,90%,100%{opacity:1}
+  95%{opacity:0.3}
+}
+
+/* Floating data tags */
+.ar-tag {
+  position:absolute;
+  background:rgba(0,212,255,0.08);
+  border:1px solid rgba(0,212,255,0.3);
+  border-radius:3px;
+  padding:5px 10px;
+  font-family:var(--font-m);
+  font-size:10px;
+  color:var(--cyan);
+  letter-spacing:0.08em;
+  white-space:nowrap;
+  pointer-events:none;
+  animation:tagFloat 4s ease-in-out infinite;
+}
+.ar-tag::before {
+  content:'';
+  position:absolute;
+  width:20px;height:1px;
+  background:var(--cyan);
+  opacity:0.4;
+}
+.ar-tag-1 { top:8%;left:-10%;animation-delay:0s; }
+.ar-tag-1::before { right:-22px;top:50%; }
+.ar-tag-2 { top:30%;right:-5%;animation-delay:1.2s; }
+.ar-tag-2::before { left:-22px;top:50%; }
+.ar-tag-3 { bottom:12%;left:5%;animation-delay:0.6s; }
+.ar-tag-3::before { right:-22px;top:50%; }
+.ar-tag-4 { bottom:25%;right:0%;animation-delay:1.8s; }
+.ar-tag-4::before { left:-22px;top:50%; }
+
+@keyframes tagFloat {
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+
+/* Side arms */
+.ar-arm-l, .ar-arm-r {
+  position:absolute;
+  top:50%;width:60px;height:4px;
+  background:linear-gradient(90deg,rgba(0,212,255,0.3),transparent);
+  border-radius:2px;
+}
+.ar-arm-l { right:100%;transform:translateY(-50%); }
+.ar-arm-r { left:100%;transform:translateY(-50%) rotate(180deg); }
+
+/* Scan line animation inside lens */
+.scan-line {
+  position:absolute;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,rgba(0,255,200,0.6),transparent);
+  animation:scanMove 3s linear infinite;
+}
+@keyframes scanMove {
+  0%{top:-2px;opacity:0}
+  5%{opacity:1}
+  95%{opacity:1}
+  100%{top:100%;opacity:0}
+}
+
+/* Floating particles */
+.particle {
+  position:absolute;
+  width:3px;height:3px;
+  background:var(--cyan);
+  border-radius:50%;
+  box-shadow:0 0 8px var(--cyan);
+  pointer-events:none;
+  animation:particleDrift 6s ease-in-out infinite;
+}
+@keyframes particleDrift {
+  0%{transform:translate(0,0);opacity:0;}
+  10%{opacity:1;}
+  90%{opacity:0.8;}
+  100%{transform:translate(var(--dx),var(--dy));opacity:0;}
+}
+
+/* ─────────────── STATS BAR ─────────────── */
+.stats-bar {
+  padding:40px 0;
+  background:var(--deep);
+  border-top:1px solid rgba(0,212,255,0.08);
+  border-bottom:1px solid rgba(0,212,255,0.08);
+  position:relative;overflow:hidden;
+}
+.stats-bar::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  animation:lineSlide 4s linear infinite;
+}
+@keyframes lineSlide {
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+.stats-grid {
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+}
+.stat-item {
+  padding:16px 28px;
+  border-right:1px solid rgba(255,255,255,0.05);
+  position:relative;
+}
+.stat-item:last-child{border-right:none;}
+.stat-val {
+  font-family:var(--font-h);
+  font-size:48px;line-height:1;
+  background:linear-gradient(135deg,var(--cyan),var(--blue2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:0.02em;
+}
+.stat-label { font-size:12px;color:var(--grey);margin-top:6px;letter-spacing:0.02em; }
+
+/* ─────────────── SECTION STYLES ─────────────── */
+.section-tag {
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-m);
+  font-size:10px;color:var(--grey);
+  letter-spacing:0.15em;text-transform:uppercase;
+  margin-bottom:16px;
+}
+.section-tag::before {
+  content:'';width:24px;height:1px;
+  background:linear-gradient(90deg,var(--cyan),transparent);
+}
+
+.section-title {
+  font-family:var(--font-h);
+  font-size:clamp(28px,4vw,52px);
+  line-height:1.1;letter-spacing:0.04em;
+  margin-bottom:16px;
+}
+
+/* ─────────────── PROBLEM ─────────────── */
+.problem-section { padding:100px 0; }
+
+.pains-grid {
+  display:grid;grid-template-columns:1fr 1fr;gap:2px;
+  border-radius:12px;overflow:hidden;
+  margin-bottom:48px;
+}
+.pain-card {
+  background:var(--card);
+  padding:28px;
+  display:flex;gap:16px;align-items:flex-start;
+  transition:all 0.3s;
+  position:relative;overflow:hidden;
+}
+.pain-card::before {
+  content:'';
+  position:absolute;top:0;left:0;
+  width:3px;height:0;
+  background:linear-gradient(180deg,var(--cyan),var(--blue));
+  transition:height 0.3s;
+}
+.pain-card:hover::before { height:100%; }
+.pain-card:hover { background:var(--card2); }
+.pain-icon { font-size:24px;flex-shrink:0;margin-top:2px; }
+.pain-title { font-size:14px;font-weight:600;color:var(--white);margin-bottom:6px; }
+.pain-desc { font-size:13px;color:var(--grey);line-height:1.55; }
+
+.solution-block {
+  padding:40px;
+  background:var(--card);
+  border:1px solid rgba(0,212,255,0.15);
+  border-radius:12px;
+  display:flex;gap:28px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.solution-block::before {
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan),var(--cyan2));
+}
+.solution-icon { font-size:44px;flex-shrink:0; }
+.solution-block h3 {
+  font-family:var(--font-h);
+  font-size:22px;line-height:1.2;
+  letter-spacing:0.04em;margin-bottom:10px;
+}
+.solution-block p { font-size:15px;color:var(--grey2);line-height:1.65; }
+
+/* ─────────────── CONTENT / GUIDES ─────────────── */
+.guides-section {
+  padding:100px 0;
+  background:var(--deep);
+  position:relative;overflow:hidden;
+}
+.guides-section::after {
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+}
+
+/* Stages list */
+.stages-list { display:flex;flex-direction:column;gap:2px;margin-bottom:60px; }
+.stage-row {
+  display:flex;align-items:stretch;
+  background:var(--card);
+  border-radius:6px;overflow:hidden;
+  transition:all 0.3s;cursor:default;
+  border:1px solid transparent;
+}
+.stage-row:hover {
+  background:var(--card2);
+  border-color:rgba(0,212,255,0.15);
+  transform:translateX(6px);
+}
+.stage-num {
+  width:68px;flex-shrink:0;
+  background:rgba(0,212,255,0.05);
+  border-right:1px solid rgba(0,212,255,0.1);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-m);
+  font-size:20px;color:var(--cyan);
+  letter-spacing:0.05em;
+}
+.stage-body { flex:1;padding:18px 24px;display:flex;align-items:center;gap:18px; }
+.stage-emoji { font-size:20px;flex-shrink:0; }
+.stage-name { font-size:15px;font-weight:600;color:var(--white);margin-bottom:3px; }
+.stage-desc { font-size:12px;color:var(--grey);letter-spacing:0.01em; }
+
+/* Bonus cards */
+.bonus-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:60px; }
+.bonus-card {
+  background:var(--card);
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:10px;padding:28px 24px;
+  position:relative;overflow:hidden;
+  transition:all 0.3s;
+}
+.bonus-card::after {
+  content:'BÔNUS';
+  position:absolute;top:14px;right:14px;
+  font-family:var(--font-m);font-size:9px;
+  color:var(--cyan);background:rgba(0,212,255,0.1);
+  padding:3px 8px;border-radius:2px;letter-spacing:0.1em;
+}
+.bonus-card:hover {
+  border-color:rgba(0,212,255,0.25);
+  transform:translateY(-4px);
+  box-shadow:0 12px 40px rgba(0,212,255,0.08);
+}
+.bonus-icon { font-size:30px;margin-bottom:14px; }
+.bonus-title { font-size:14px;font-weight:600;color:var(--white);margin-bottom:8px; }
+.bonus-desc { font-size:12px;color:var(--grey);line-height:1.55; }
+
+/* ─────────────── 3 GUIDES COMPARISON ─────────────── */
+.combo-section {
+  padding:100px 0;
+  position:relative;overflow:hidden;
+}
+.combo-section::before {
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:1000px;height:500px;
+  background:radial-gradient(ellipse,rgba(0,212,255,0.04) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+.guides-row {
+  display:grid;grid-template-columns:1fr 60px 1fr 60px 1fr;
+  gap:0;align-items:start;margin-bottom:60px;
+}
+.guide-card {
+  background:var(--card);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:12px;overflow:hidden;
+  transition:all 0.3s;
+}
+.guide-card:hover {
+  border-color:rgba(0,212,255,0.3);
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,212,255,0.1);
+}
+.guide-top {
+  padding:24px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  background:rgba(0,212,255,0.03);
+}
+.guide-badge {
+  font-family:var(--font-m);font-size:9px;
+  letter-spacing:0.12em;text-transform:uppercase;
+  padding:4px 10px;border-radius:2px;
+  margin-bottom:14px;display:inline-block;
+}
+.guide-badge.a { background:rgba(0,212,255,0.1);color:var(--cyan); }
+.guide-badge.b { background:rgba(34,217,138,0.1);color:var(--green); }
+.guide-badge.c { background:rgba(240,180,41,0.1);color:var(--gold); }
+
+.guide-icon { font-size:36px;margin-bottom:12px; }
+.guide-name {
+  font-family:var(--font-h);
+  font-size:14px;line-height:1.3;letter-spacing:0.06em;
+  color:var(--white);margin-bottom:8px;
+}
+.guide-desc { font-size:12px;color:var(--grey);line-height:1.55; }
+.guide-body { padding:20px 24px; }
+.guide-item {
+  font-size:12px;color:var(--grey2);
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  display:flex;gap:8px;align-items:flex-start;
+}
+.guide-item:last-child{border-bottom:none;}
+.guide-item.yes { color:var(--white); }
+.guide-item.yes::before { content:'✓';color:var(--cyan);flex-shrink:0; }
+.guide-item.no::before { content:'—';color:var(--grey);flex-shrink:0; }
+
+.combo-plus {
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-h);font-size:28px;
+  color:rgba(0,212,255,0.3);
+  padding-top:80px;
+}
+
+/* Combo price box */
+.combo-price {
+  background:var(--card);
+  border:1px solid rgba(0,212,255,0.2);
+  border-radius:12px;padding:40px;
+  display:flex;gap:48px;align-items:center;
+  position:relative;overflow:hidden;
+  margin-top:0;
+}
+.combo-price::before {
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--cyan2));
+}
+.combo-price-text h3 {
+  font-family:var(--font-h);
+  font-size:24px;letter-spacing:0.04em;
+  margin-bottom:12px;line-height:1.2;
+}
+.combo-price-text p { font-size:14px;color:var(--grey2);line-height:1.6;margin-bottom:20px; }
+.combo-math {
+  display:flex;align-items:center;gap:12px;
+  flex-wrap:wrap;margin-bottom:20px;
+}
+.math-item { text-align:center; }
+.math-val {
+  font-family:var(--font-h);font-size:20px;
+  color:var(--grey2);
+}
+.math-label { font-size:10px;color:var(--grey);letter-spacing:0.08em; }
+.math-op {
+  font-family:var(--font-h);font-size:22px;
+  color:rgba(0,212,255,0.4);
+}
+.math-total .math-val {
+  font-size:28px;
+  background:linear-gradient(135deg,var(--cyan),var(--blue2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.math-de {
+  font-family:var(--font-m);font-size:10px;
+  color:var(--grey);text-decoration:line-through;
+}
+.math-save {
+  font-family:var(--font-m);font-size:10px;
+  color:var(--green);letter-spacing:0.06em;
+}
+.combo-price-visual {
+  flex-shrink:0;
+  display:flex;flex-direction:column;gap:8px;align-items:center;
+}
+
+/* ─────────────── FOR WHO ─────────────── */
+.who-section { padding:100px 0; background:var(--deep); }
+
+.who-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:16px; }
+.who-card {
+  background:var(--card);
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:12px;padding:32px 28px;
+  transition:all 0.3s;
+  position:relative;overflow:hidden;
+}
+.who-card::before {
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:2px;background:transparent;
+  transition:background 0.3s;
+}
+.who-card:hover::before {
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+}
+.who-card:hover {
+  border-color:rgba(0,212,255,0.2);
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,212,255,0.08);
+}
+.who-emoji { font-size:36px;margin-bottom:16px; }
+.who-title {
+  font-family:var(--font-h);
+  font-size:18px;letter-spacing:0.06em;
+  color:var(--white);margin-bottom:10px;
+}
+.who-desc { font-size:13px;color:var(--grey);line-height:1.6;margin-bottom:16px; }
+.who-item {
+  font-size:12px;color:var(--grey2);
+  display:flex;gap:8px;align-items:center;
+  margin-bottom:6px;
+}
+.who-item::before { content:'→';color:var(--cyan);font-size:11px;flex-shrink:0; }
+
+/* ─────────────── TESTIMONIALS ─────────────── */
+.testi-section { padding:100px 0; }
+
+.testi-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:16px; }
+.testi-card {
+  background:var(--card);
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:12px;padding:28px;
+  transition:all 0.3s;
+}
+.testi-card:hover {
+  border-color:rgba(0,212,255,0.15);
+  transform:translateY(-4px);
+}
+.testi-card.featured {
+  background:linear-gradient(135deg,var(--blue),#0a3a7a);
+  border-color:rgba(0,212,255,0.3);
+  box-shadow:0 8px 40px rgba(0,212,255,0.15);
+}
+.testi-stars { color:var(--gold);font-size:13px;margin-bottom:14px; }
+.testi-card.featured .testi-stars { color:rgba(255,255,255,0.8); }
+.testi-text {
+  font-size:14px;line-height:1.65;color:var(--grey2);
+  margin-bottom:20px;font-style:italic;
+}
+.testi-card.featured .testi-text { color:rgba(255,255,255,0.9);font-style:normal; }
+.testi-author { display:flex;align-items:center;gap:12px; }
+.testi-av {
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-h);font-size:11px;
+  color:white;flex-shrink:0;
+}
+.testi-name { font-size:13px;font-weight:600;color:var(--white); }
+.testi-role { font-size:11px;color:var(--grey); }
+
+/* ─────────────── GUARANTEE ─────────────── */
+.guarantee-strip { padding:80px 0;border-top:1px solid rgba(255,255,255,0.04); }
+.guarantee-inner { display:flex;gap:60px;align-items:center; }
+.guarantee-badge {
+  width:160px;height:160px;flex-shrink:0;
+  border:2px solid rgba(0,212,255,0.4);
+  border-radius:50%;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:20px;
+  position:relative;
+  background:radial-gradient(circle,rgba(0,212,255,0.05),transparent);
+  box-shadow:0 0 30px rgba(0,212,255,0.15),inset 0 0 20px rgba(0,212,255,0.04);
+}
+.guarantee-badge::before {
+  content:'';position:absolute;inset:-6px;
+  border-radius:50%;
+  border:1px solid rgba(0,212,255,0.15);
+}
+.guarantee-num {
+  font-family:var(--font-h);font-size:52px;line-height:1;
+  background:linear-gradient(135deg,var(--cyan),var(--blue2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.guarantee-days { font-size:14px;font-weight:600;color:var(--white); }
+.guarantee-text h3 {
+  font-family:var(--font-h);
+  font-size:32px;letter-spacing:0.04em;
+  margin-bottom:10px;
+}
+.guarantee-text p { font-size:15px;color:var(--grey2);line-height:1.65;max-width:480px; }
+
+/* ─────────────── PRICE ─────────────── */
+.price-section {
+  padding:100px 0;background:var(--deep);
+  position:relative;overflow:hidden;
+}
+.price-section::before {
+  content:'';position:absolute;bottom:-200px;left:50%;
+  transform:translateX(-50%);
+  width:800px;height:400px;
+  background:radial-gradient(ellipse,rgba(0,212,255,0.06) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+.price-card {
+  max-width:540px;margin:0 auto;
+  background:var(--card);
+  border:1px solid rgba(0,212,255,0.25);
+  border-radius:16px;overflow:hidden;
+  position:relative;
+  box-shadow:0 0 60px rgba(0,212,255,0.08);
+}
+.price-card-top {
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  padding:14px 28px;
+  text-align:center;
+  font-family:var(--font-m);
+  font-size:11px;font-weight:600;
+  letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--black);
+}
+.price-body { padding:40px;text-align:center; }
+.price-de { font-size:15px;color:var(--grey);text-decoration:line-through;margin-bottom:4px; }
+.price-val {
+  font-family:var(--font-h);
+  font-size:80px;line-height:1;
+  background:linear-gradient(135deg,var(--white),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:-0.01em;margin-bottom:4px;
+}
+.price-val sup { font-size:36px;vertical-align:super;line-height:0; }
+.price-parcel { font-size:13px;color:var(--grey);margin-bottom:32px; }
+.price-parcel strong { color:var(--white); }
+
+.price-includes {
+  text-align:left;margin-bottom:32px;
+  padding:22px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.04);
+  border-radius:8px;
+}
+.include-item {
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:13px;color:var(--grey2);
+  margin-bottom:10px;line-height:1.4;
+}
+.include-item:last-child{margin-bottom:0;}
+.check {
+  width:18px;height:18px;
+  background:rgba(34,217,138,0.1);
+  border:1px solid rgba(34,217,138,0.25);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+  font-size:9px;color:var(--green);
+}
+
+.btn-buy {
+  width:100%;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  color:var(--black);font-size:15px;font-weight:700;
+  font-family:var(--font-m);
+  padding:20px;
+  border-radius:8px;border:none;cursor:pointer;
+  transition:all 0.3s;
+  text-transform:uppercase;letter-spacing:0.08em;
+  position:relative;overflow:hidden;
+  text-decoration:none;display:block;
+}
+.btn-buy::before {
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.15) 0%,transparent 60%);
+}
+.btn-buy:hover {
+  transform:translateY(-3px);
+  box-shadow:0 16px 48px rgba(0,212,255,0.4);
+}
+
+.price-safe {
+  margin-top:14px;font-size:11px;color:var(--grey);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+
+.urgency-box {
+  margin-top:32px;padding:18px 22px;
+  background:rgba(240,180,41,0.05);
+  border:1px solid rgba(240,180,41,0.15);
+  border-radius:8px;text-align:center;
+  font-size:13px;color:var(--grey2);
+}
+.urgency-box strong { color:var(--gold); }
+
+/* ─────────────── FAQ ─────────────── */
+.faq-section { padding:100px 0; }
+.faq-list { display:flex;flex-direction:column;gap:2px; }
+.faq-item {
+  background:var(--card);border-radius:6px;overflow:hidden;
+}
+.faq-q {
+  padding:20px 26px;
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;font-size:15px;font-weight:500;color:var(--white);gap:16px;
+  transition:background 0.2s;
+}
+.faq-q:hover { background:var(--card2); }
+.faq-arr { font-size:18px;color:var(--cyan);transition:transform 0.3s;flex-shrink:0; }
+.faq-item.open .faq-arr { transform:rotate(45deg); }
+.faq-a {
+  display:none;padding:0 26px 20px;
+  font-size:14px;color:var(--grey2);line-height:1.65;
+}
+.faq-item.open .faq-a { display:block; }
+
+/* ─────────────── FINAL CTA ─────────────── */
+.final-cta {
+  padding:120px 0;text-align:center;
+  position:relative;overflow:hidden;
+}
+.final-cta::before {
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:900px;height:400px;
+  background:radial-gradient(ellipse,rgba(0,212,255,0.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.final-cta h2 {
+  font-family:var(--font-h);
+  font-size:clamp(28px,5vw,64px);
+  line-height:1.05;letter-spacing:0.04em;
+  margin-bottom:20px;
+}
+.final-cta p {
+  font-size:17px;color:var(--grey2);
+  max-width:480px;margin:0 auto 44px;line-height:1.6;
+}
+
+/* ─────────────── FOOTER ─────────────── */
+footer {
+  padding:36px 0;
+  border-top:1px solid rgba(255,255,255,0.04);
+  background:var(--black);
+}
+.footer-inner {
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-logo {
+  font-family:var(--font-h);font-size:14px;
+  letter-spacing:0.1em;color:var(--grey);
+}
+.footer-links { display:flex;gap:24px; }
+.footer-links a {
+  font-size:12px;color:var(--grey);text-decoration:none;
+  transition:color 0.15s;letter-spacing:0.04em;
+}
+.footer-links a:hover { color:var(--white); }
+.footer-copy {
+  font-size:11px;color:var(--grey);
+  width:100%;text-align:center;margin-top:8px;
+  letter-spacing:0.04em;
+}
+
+/* ─────────────── ANIMATIONS ─────────────── */
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(28px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.anim { animation:fadeUp 0.7s ease both; }
+.a1{animation-delay:0.1s}.a2{animation-delay:0.25s}
+.a3{animation-delay:0.4s}.a4{animation-delay:0.55s}
+
+/* ─────────────── RESPONSIVE ─────────────── */
+@media(max-width:900px){
+  .hero-layout{
+    grid-template-columns:1fr;
+    display:flex;
+    flex-direction:column;
+  }
+  .hero-visual{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    order:3;
+    margin-top:32px;
+    width:100%;
+    overflow:hidden;
+    position:relative;
+    height:240px;
+    flex-shrink:0;
+  }
+  .hero-visual > div { position:absolute; }
+  #ar-canvas{ max-width:100%; height:240px; }
+  .ar-frame{ width:340px; height:220px; }
+  .ar-scene{ width:340px; height:220px; }
+  .ar-headset{ width:320px; height:190px; }
+  .ar-body{ width:300px; height:110px; }
+  .ar-lens-l{ width:104px; height:66px; }
+  .ar-lens-r{ width:104px; height:66px; }
+  .ar-lens-l canvas{ width:104px; height:66px; }
+  .ar-lens-r canvas{ width:104px; height:66px; }
+  .ar-tag{ display:none; }
+  .guides-row{grid-template-columns:1fr;}
+  .combo-plus{display:none;}
+  .who-grid{grid-template-columns:1fr;}
+  .testi-grid{grid-template-columns:1fr;}
+  .bonus-grid{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .stat-item:nth-child(2){border-right:none;}
+  .pains-grid{grid-template-columns:1fr;}
+  .guarantee-inner{flex-direction:column;text-align:center;}
+  .combo-price{flex-direction:column;gap:28px;}
+  .footer-inner{flex-direction:column;align-items:flex-start;}
+  .hero-layout{ gap:0; }
+  .hero-visual{ margin-top:20px; height:200px; }
+  .ar-frame{ width:280px; height:190px; }
+  .ar-scene{ width:280px; height:190px; }
+  .ar-headset{ width:260px;height:155px; }
+  .ar-body{ width:240px;height:90px; }
+  .ar-lens-l{ width:84px;height:54px; }
+  .ar-lens-r{ width:84px;height:54px; }
+}
+@media(max-width:480px){
+  .hero h1{font-size:28px;}
+  .price-val{font-size:60px;}
+  .hero-visual{ margin-top:12px; height:160px; }
+  .ar-frame{ width:220px; height:150px; }
+  .ar-scene{ width:220px; height:150px; }
+  .ar-headset{ width:210px;height:126px; }
+  .ar-body{ width:196px;height:74px; }
+  .ar-lens-l{ width:68px;height:44px;left:24%; }
+  .ar-lens-r{ width:68px;height:44px;right:auto;left:74%; }
+}
+
+/* ─── GUIDE FOOTER ─── */
+.guide-card { display:flex; flex-direction:column; }
+.guide-body { flex:1; }
+.guide-footer {
+  padding: 16px 24px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.15);
+}
+.guide-price {
+  font-family: var(--font-h);
+  font-size: 22px;
+  background: linear-gradient(135deg, var(--cyan), var(--blue2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.02em;
+}
+.guide-cta {
+  font-family: var(--font-m);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.3);
+  color: var(--cyan);
+  padding: 8px 16px; border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+.guide-cta:hover {
+  background: var(--cyan); color: var(--black);
+  box-shadow: 0 0 16px rgba(0,212,255,0.4);
+}
+.guide-cta.gold {
+  background: rgba(240,180,41,0.08);
+  border-color: rgba(240,180,41,0.3);
+  color: var(--gold);
+}
+.guide-cta.gold:hover {
+  background: var(--gold); color: var(--black);
+  box-shadow: 0 0 16px rgba(240,180,41,0.4);
+}
+
+/* ─── CART PULSE INDICATOR ─── */
+.cart-pulse-banner {
+  background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(26,127,255,0.08));
+  border: 1px solid rgba(0,212,255,0.25);
+  border-radius: 12px;
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.cart-pulse-banner::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan), var(--cyan2));
+  animation: gradShift 3s linear infinite;
+}
+.pulse-dot {
+  width: 14px; height: 14px;
+  background: var(--cyan);
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0 rgba(0,212,255,0.6);
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0%  { box-shadow: 0 0 0 0 rgba(0,212,255,0.6); }
+  70% { box-shadow: 0 0 0 12px rgba(0,212,255,0); }
+  100%{ box-shadow: 0 0 0 0 rgba(0,212,255,0); }
+}
+.pulse-text {
+  font-size: 14px; color: var(--white); font-weight: 500;
+}
+.pulse-text span { color: var(--cyan); font-weight: 700; }
+.pulse-arrow {
+  margin-left: auto;
+  font-family: var(--font-m); font-size: 20px;
+  color: var(--cyan);
+  animation: arrowBounce 1.4s ease-in-out infinite;
+}
+@keyframes arrowBounce {
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(6px); }
+}
+
+/* ─── CART ─── */
+.cart-section {
+  padding: 100px 0;
+  background: var(--deep);
+  position: relative;
+  overflow: hidden;
+}
+.cart-section::before {
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:900px;height:500px;
+  background:radial-gradient(ellipse,rgba(0,212,255,0.05) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+@media(max-width:700px){ .cart-grid{ grid-template-columns:1fr; } }
+
+.cart-item {
+  background: var(--card);
+  border: 2px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.cart-item:hover {
+  border-color: rgba(0,212,255,0.3);
+  transform: translateY(-3px);
+}
+.cart-item.selected {
+  border-color: var(--cyan);
+  background: rgba(0,212,255,0.06);
+  box-shadow: 0 0 30px rgba(0,212,255,0.12);
+}
+.cart-item.selected::after {
+  content: '✓';
+  position: absolute; top: 14px; right: 16px;
+  width: 24px; height: 24px;
+  background: var(--cyan);
+  color: var(--black);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  animation: popIn 0.2s ease;
+}
+@keyframes popIn {
+  0%{transform:scale(0);}
+  70%{transform:scale(1.2);}
+  100%{transform:scale(1);}
+}
+.cart-item-icon { font-size: 32px; margin-bottom: 12px; }
+.cart-item-name {
+  font-family: var(--font-h);
+  font-size: 13px; letter-spacing: 0.06em;
+  color: var(--white); margin-bottom: 6px;
+  padding-right: 28px;
+}
+.cart-item-desc { font-size: 12px; color: var(--grey); line-height: 1.55; margin-bottom: 14px; }
+.cart-item-price {
+  font-family: var(--font-m);
+  font-size: 22px; color: var(--cyan);
+  font-weight: 700;
+}
+.cart-item-price .de {
+  font-size: 12px; color: var(--grey);
+  text-decoration: line-through;
+  margin-right: 6px;
+}
+.cart-item.pack-card {
+  border-color: rgba(0,212,255,0.2);
+  background: linear-gradient(135deg, rgba(0,212,255,0.04), rgba(26,127,255,0.04));
+}
+.pack-badge {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  color: var(--black);
+  font-family: var(--font-m);
+  font-size: 9px; letter-spacing: 0.12em;
+  padding: 3px 10px; border-radius: 20px;
+  margin-bottom: 10px; font-weight: 700;
+}
+.cart-summary {
+  background: var(--card);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 14px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: sticky; bottom: 16px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+}
+.cart-summary-left { flex: 1; min-width: 200px; }
+.cart-label {
+  font-family: var(--font-m);
+  font-size: 10px; letter-spacing: 0.12em;
+  color: var(--grey); text-transform: uppercase; margin-bottom: 6px;
+}
+.cart-items-list {
+  font-size: 13px; color: var(--grey2); margin-bottom: 8px;
+  min-height: 20px;
+}
+.cart-total-line {
+  display: flex; align-items: baseline; gap: 10px;
+}
+.cart-total {
+  font-family: var(--font-h);
+  font-size: 36px;
+  background: linear-gradient(135deg, var(--white), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cart-savings {
+  font-family: var(--font-m);
+  font-size: 11px; color: var(--green);
+}
+.cart-empty-msg {
+  font-size: 13px; color: var(--grey);
+  font-style: italic;
+}
+.btn-cart {
+  background: linear-gradient(135deg, var(--blue), var(--cyan));
+  color: var(--black);
+  font-family: var(--font-m);
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 16px 32px; border-radius: 6px;
+  border: none; cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none; display: inline-block;
+  opacity: 0.4;
+  pointer-events: none;
+}
+.btn-cart.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.btn-cart.active:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(0,212,255,0.4);
+}
+.cart-hint {
+  font-family: var(--font-m);
+  font-size: 10px; color: var(--grey);
+  text-align: center; margin-top: 14px;
+  letter-spacing: 0.06em;
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">⚡ LANÇAMENTO — OFERTA POR TEMPO LIMITADO · 3 GUIAS + BÔNUS EXCLUSIVOS</div>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-mark">SA</div>
+        SUPREMO ALICERCE
+      </a>
+      <a href="javascript:void(0)" onclick="document.getElementById('preco').scrollIntoView({behavior:'smooth'})" class="nav-cta">ESCOLHER GUIAS →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb-1"></div>
+  <div class="hero-orb-2"></div>
+  <div class="container" style="position:relative;z-index:2;width:100%;">
+    <div class="hero-layout">
+
+      <!-- TEXT -->
+      <div>
+        <div class="hero-badge anim a1">
+          <span>█</span> PARA QUEM CONSTRÓI DE VERDADE
+        </div>
+        <h1 class="anim a2">
+          <span class="hl">CONSTRUA</span>
+          COM A PRECISÃO
+          <span class="outline">DE UMA MÁQUINA</span>
+        </h1>
+        <p class="hero-sub anim a3">
+          Guias de IA para Construção Civil. <strong>Do alicerce ao telhado</strong> — calcule materiais, fiscalize etapas e elimine o desperdício que destrói orçamentos.
+        </p>
+        <div class="hero-ctas anim a4">
+          <a href="javascript:void(0)" onclick="document.getElementById('preco').scrollIntoView({behavior:'smooth'})" class="btn-primary">
+            QUERO OS 3 GUIAS
+            <span>→</span>
+          </a>
+          <a href="javascript:void(0)" onclick="document.getElementById('conteudo').scrollIntoView({behavior:'smooth'})" class="btn-ghost">
+            Ver o que está incluído ↓
+          </a>
+        </div>
+        <div class="hero-social-proof anim a4">
+          <div class="avatares">
+            <div class="avatar" style="background:#1A7FFF;">MR</div>
+            <div class="avatar" style="background:#1D7A50;">JC</div>
+            <div class="avatar" style="background:#7B5EA7;">PS</div>
+            <div class="avatar" style="background:#B87A00;">AF</div>
+            <div class="avatar" style="background:#1A7FFF;">RM</div>
+          </div>
+          <div>
+            <div class="stars">★★★★★</div>
+            <div class="proof-text">
+              <strong>+1.200 profissionais</strong> já usam o guia nas obras
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D AR VISUAL -->
+      <div class="hero-visual" id="heroVisual">
+        <div class="ar-frame" id="arFrame">
+          <div class="ar-scene" id="arScene">
+            <div class="ar-headset">
+              <div class="ar-body">
+                <!-- Left Lens -->
+                <div class="ar-lens-l">
+                  <div class="lens-content">
+                    <canvas id="lensL" width="154" height="96"></canvas>
+                    <div class="hud-corner tl"></div>
+                    <div class="hud-corner tr"></div>
+                    <div class="hud-corner bl"></div>
+                    <div class="hud-corner br"></div>
+                    <div class="scan-line"></div>
+                    <div class="hud-status">ALICERCE · SCAN OK</div>
+                  </div>
+                </div>
+                <!-- Right Lens -->
+                <div class="ar-lens-r">
+                  <div class="lens-content">
+                    <canvas id="lensR" width="154" height="96"></canvas>
+                    <div class="hud-corner tl"></div>
+                    <div class="hud-corner tr"></div>
+                    <div class="hud-corner bl"></div>
+                    <div class="hud-corner br"></div>
+                    <div class="scan-line" style="animation-delay:1.5s"></div>
+                    <div class="hud-status">IA · ATIVA</div>
+                  </div>
+                </div>
+                <div class="ar-bridge"></div>
+                <div class="ar-arm-l"></div>
+                <div class="ar-arm-r"></div>
+              </div>
+            </div>
+
+            <!-- Floating data tags -->
+            <div class="ar-tag ar-tag-1">FUNDAÇÃO · OK</div>
+            <div class="ar-tag ar-tag-2">CARGA: 48 kN/m²</div>
+            <div class="ar-tag ar-tag-3">CONCRETO · fck 25</div>
+            <div class="ar-tag ar-tag-4">FERRAGEM · 180 kg</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ STATS BAR ══════════ -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-val">10</div>
+        <div class="stat-label">Etapas da obra cobertas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">60+</div>
+        <div class="stat-label">Prompts prontos para usar</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">0</div>
+        <div class="stat-label">Conhecimento técnico necessário</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">∞</div>
+        <div class="stat-label">Obras onde pode aplicar</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PROBLEMA ══════════ -->
+<section class="problem-section">
+  <div class="container">
+    <div class="section-tag">O problema que todo dono de obra conhece</div>
+    <h2 class="section-title">VOCÊ JÁ PASSOU<br>POR ALGUM DESSES?</h2>
+
+    <div class="pains-grid">
+      <div class="pain-card">
+        <div class="pain-icon">💸</div>
+        <div>
+          <div class="pain-title">Sobra material ou falta na hora H</div>
+          <div class="pain-desc">Comprou a mais e perdeu dinheiro, ou faltou material e a obra parou por dias.</div>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">😤</div>
+        <div>
+          <div class="pain-title">Prestadores cobrando errado</div>
+          <div class="pain-desc">Lista do pedreiro inflada, medição incorreta, orçamento que não fecha com a realidade.</div>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🔍</div>
+        <div>
+          <div class="pain-title">Não sabe se o serviço foi feito certo</div>
+          <div class="pain-desc">A obra avança mas você não tem como verificar qualidade sem pagar um técnico a cada visita.</div>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">📅</div>
+        <div>
+          <div class="pain-title">Atrasos que viram bola de neve</div>
+          <div class="pain-desc">Uma etapa atrasou, a próxima equipe foi embora, o cronograma virou caos.</div>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">😰</div>
+        <div>
+          <div class="pain-title">Problemas que aparecem tarde demais</div>
+          <div class="pain-desc">Trinca depois da pintura, vazamento depois de fechar o piso, ferragem errada após a concretagem.</div>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">📞</div>
+        <div>
+          <div class="pain-title">Depender de engenheiro para tudo</div>
+          <div class="pain-desc">Sem acesso ao técnico, qualquer dúvida paralisa a decisão e a obra espera.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="solution-block">
+      <div class="solution-icon">🤖</div>
+      <div>
+        <h3>A IA RESOLVE TUDO ISSO — SE VOCÊ SOUBER PERGUNTAR</h3>
+        <p>O problema não é a ferramenta. É que 99% dos prompts são genéricos demais para funcionar na construção civil. Este guia resolve exatamente isso: <strong style="color:var(--white)">comandos precisos, por etapa, feitos por quem entende de obra.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CONTEÚDO ══════════ -->
+<section class="guides-section" id="conteudo">
+  <div class="container">
+    <div class="section-tag">O que está dentro do guia</div>
+    <h2 class="section-title">DO ALICERCE AO<br>TELHADO, COBERTO</h2>
+    <p style="font-size:16px;color:var(--grey2);max-width:560px;line-height:1.65;margin-bottom:48px;">
+      Cada etapa tem prompts para o profissional calcular com precisão e prompts para o dono fiscalizar com confiança. Mais checklists interativos de qualidade.
+    </p>
+
+    <div class="stages-list">
+      <div class="stage-row">
+        <div class="stage-num">01</div>
+        <div class="stage-body">
+          <div class="stage-emoji">🏗</div>
+          <div><div class="stage-name">Terraplenagem e Locação</div><div class="stage-desc">Volume de corte/aterro, horas de máquina, drenagem, gabarito e estacas</div></div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">02</div>
+        <div class="stage-body">
+          <div class="stage-emoji">⚓</div>
+          <div><div class="stage-name">Fundação e Ferragem</div><div class="stage-desc">Baldrame, sapatas, concreto, ferragem, traços, comparação com lista do ferreiro</div></div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">03</div>
+        <div class="stage-body">
+          <div class="stage-emoji">🧱</div>
+          <div><div class="stage-name">Alvenaria, Colunas e Laje</div><div class="stage-desc">Tijolos, vergas, contravergas, vigas aéreas, armação e laje completa</div></div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">04</div>
+        <div class="stage-body">
+          <div class="stage-emoji">🏠</div>
+          <div><div class="stage-name">Cobertura e Telhado</div><div class="stage-desc">Madeiramento, telhas, calhas, rufos, inclinação ideal, impermeabilização</div></div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">05</div>
+        <div class="stage-body">
+          <div class="stage-emoji">⚡</div>
+          <div><div class="stage-name">Instalações Elétricas</div><div class="stage-desc">Quadro, circuitos, bitolas, aterramento, SPDA e como fiscalizar como leigo</div></div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">06</div>
+        <div class="stage-body">
+          <div class="stage-emoji">🚿</div>
+          <div><div class="stage-name">Instalações Hidrossanitárias</div><div class="stage-desc">Água fria, esgoto, registros, caixa d'água, gordura e teste de estanqueidade</div></div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">07</div>
+        <div class="stage-body">
+          <div class="stage-emoji">🪟</div>
+          <div><div class="stage-name">Revestimento e Acabamento</div><div class="stage-desc">Piso, azulejo, argamassa AC, rejunte, nivelador e como checar assentamento</div></div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">08</div>
+        <div class="stage-body">
+          <div class="stage-emoji">🎨</div>
+          <div><div class="stage-name">Pintura, Gesso e Fachada</div><div class="stage-desc">Selador, massa, látex, textura, grafiato, gesso liso e cálculo por demão</div></div>
+        </div>
+      </div>
+      <div class="stage-row">
+        <div class="stage-num">09</div>
+        <div class="stage-body">
+          <div class="stage-emoji">📊</div>
+          <div><div class="stage-name">Gestão, Cronograma e Crises</div><div class="stage-desc">Cronograma físico-financeiro, negociação, contratos, conferência de medição</div></div>
+        </div>
+      </div>
+      <div class="stage-row" style="border-color:rgba(0,212,255,0.2);background:rgba(0,212,255,0.04);">
+        <div class="stage-num" style="color:var(--cyan2);">★</div>
+        <div class="stage-body">
+          <div class="stage-emoji">🏠</div>
+          <div>
+            <div class="stage-name" style="color:var(--cyan);">Fiscalização do Dono da Obra</div>
+            <div class="stage-desc">Checklists exclusivos para verificar cada etapa sem ser técnico e evitar pagar por serviço mal feito</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BONUSES -->
+    <div style="margin-bottom:20px;">
+      <div class="section-tag" style="margin-bottom:12px;">Incluído gratuitamente</div>
+      <h3 style="font-family:var(--font-h);font-size:28px;letter-spacing:0.04em;margin-bottom:28px;">BÔNUS EXCLUSIVOS</h3>
+    </div>
+    <div class="bonus-grid">
+      <div class="bonus-card">
+        <div class="bonus-icon">📋</div>
+        <div class="bonus-title">Prompt 0 — O Cérebro da Obra</div>
+        <div class="bonus-desc">Configuração inicial que transforma qualquer IA em engenheiro sênior com tabelas, normas ABNT e checklists automáticos.</div>
+      </div>
+      <div class="bonus-card">
+        <div class="bonus-icon">⚠️</div>
+        <div class="bonus-title">Prompt de Emergência</div>
+        <div class="bonus-desc">Para quando algo deu errado na obra. Diagnóstico, gravidade e solução em menos de 2 minutos. Funciona 24h.</div>
+      </div>
+      <div class="bonus-card">
+        <div class="bonus-icon">🤝</div>
+        <div class="bonus-title">Prompt de Negociação</div>
+        <div class="bonus-desc">Compare qualquer orçamento de prestador com preços reais de mercado antes de assinar qualquer contrato.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 3 GUIAS ══════════ -->
+<section class="combo-section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px;">
+      <div class="section-tag" style="justify-content:center;margin-bottom:12px;">Dupla imbatível</div>
+      <h2 class="section-title">O GUIA DE TEXTO CALCULA.<br>O GUIA VISUAL ENXERGA.<br><span style="background:linear-gradient(90deg,var(--cyan),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">OS 100 COMANDOS AGILIZAM.</span></h2>
+      <p style="font-size:16px;color:var(--grey2);max-width:560px;margin:0 auto;line-height:1.65;">
+        Sozinhos, cada guia já entrega resultado. Juntos, cobrem a obra de ponta a ponta — do cálculo à imagem, com 100 prompts prontos sempre à mão.
+      </p>
+    </div>
+
+    <div class="guides-row">
+      <!-- Guide 1 -->
+      <div class="guide-card">
+        <div class="guide-top">
+          <div class="guide-badge a">Guia principal</div>
+          <div class="guide-icon">📋</div>
+          <div class="guide-name">GUIA DE PROMPTS<br>DE TEXTO</div>
+          <div class="guide-desc">Você digita os dados da obra, a IA faz os cálculos e entrega tabelas com memória de cálculo, normas ABNT e checklists.</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-item yes">Calcula quantidade de materiais</div>
+          <div class="guide-item yes">Compara lista do pedreiro</div>
+          <div class="guide-item yes">Gera checklist de qualidade</div>
+          <div class="guide-item yes">Dimensiona estrutura e instalações</div>
+          <div class="guide-item no">Não analisa fotos reais da obra</div>
+          <div class="guide-item no">Não visualiza acabamentos</div>
+        </div>
+        <div class="guide-footer">
+          <div class="guide-price">R$47</div>
+          <a href="javascript:void(0)" class="guide-cta" onclick="scrollToCartAndSelect('texto')">SELECIONAR →</a>
+        </div>
+      </div>
+
+      <div class="combo-plus">+</div>
+
+      <!-- Guide 2 -->
+      <div class="guide-card">
+        <div class="guide-top">
+          <div class="guide-badge b">Complemento visual</div>
+          <div class="guide-icon">📸</div>
+          <div class="guide-name">GUIA DE PROMPTS<br>VISUAIS</div>
+          <div class="guide-desc">Você envia fotos, esboços ou plantas da obra — a IA analisa, diagnostica, gera renders e cria visualizações profissionais.</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-item yes">Analisa fotos de ferragem e estrutura</div>
+          <div class="guide-item yes">Simula cores e revestimentos</div>
+          <div class="guide-item yes">Transforma esboços em renders</div>
+          <div class="guide-item yes">Gera relatório fotográfico</div>
+          <div class="guide-item no">Não faz cálculos estruturais</div>
+          <div class="guide-item no">Não compara orçamentos</div>
+        </div>
+        <div class="guide-footer">
+          <div class="guide-price">R$47</div>
+          <a href="javascript:void(0)" class="guide-cta" onclick="scrollToCartAndSelect('visual')">SELECIONAR →</a>
+        </div>
+      </div>
+
+      <div class="combo-plus">+</div>
+
+      <!-- Guide 3 -->
+      <div class="guide-card" style="border-top:2px solid var(--gold);">
+        <div class="guide-top">
+          <div class="guide-badge c">Referência rápida</div>
+          <div class="guide-icon">⚡</div>
+          <div class="guide-name">100 COMANDOS<br>PRONTOS</div>
+          <div class="guide-desc">100 prompts organizados por etapa e situação — o comando certo na hora certa da obra, sempre à mão.</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-item yes">100 prompts para copiar e usar</div>
+          <div class="guide-item yes">Organizados por etapa da construção</div>
+          <div class="guide-item yes">Funciona com qualquer IA gratuita</div>
+          <div class="guide-item yes">Consulta rápida em campo</div>
+          <div class="guide-item no">Sem checklists interativos</div>
+          <div class="guide-item no">Sem análise visual de fotos</div>
+        </div>
+        <div class="guide-footer">
+          <div class="guide-price">R$47</div>
+          <a href="javascript:void(0)" class="guide-cta gold" onclick="scrollToCartAndSelect('comandos')">SELECIONAR →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Combo price -->
+    <div class="combo-price">
+      <div class="combo-price-text">
+        <div class="section-tag" style="margin-bottom:10px;">⚡ Oferta especial · Apenas no lançamento</div>
+        <h3>LEVE OS TRÊS POR<br>UM PREÇO ESPECIAL</h3>
+        <p>Comprando o Pack Completo você leva os 3 guias com desconto exclusivo. Cobertura total da sua obra — do cálculo à imagem.</p>
+        <div class="combo-math">
+          <div class="math-item">
+            <div class="math-val">R$47</div>
+            <div class="math-label">Guia de Texto</div>
+          </div>
+          <div class="math-op">+</div>
+          <div class="math-item">
+            <div class="math-val">R$47</div>
+            <div class="math-label">Guia Visual</div>
+          </div>
+          <div class="math-op">+</div>
+          <div class="math-item">
+            <div class="math-val">R$47</div>
+            <div class="math-label">100 Comandos</div>
+          </div>
+          <div class="math-op">=</div>
+          <div class="math-item math-total">
+            <div class="math-de">R$141 separados</div>
+            <div class="math-val">R$89,90</div>
+            <div class="math-save">↓ ECONOMIZE R$51,10</div>
+          </div>
+        </div>
+        <a href="https://pay.kiwify.com.br/J3XBOtN" target="_blank" class="btn-primary" style="display:inline-flex;">
+          VER PACK COMPLETO →
+        </a>
+      </div>
+      <div class="combo-price-visual">
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
+          <div style="background:var(--card2);border:1px solid rgba(0,212,255,0.15);border-radius:8px;padding:20px 28px;text-align:center;width:180px;">
+            <div style="font-size:24px;margin-bottom:8px;">📋</div>
+            <div style="font-family:var(--font-m);font-size:10px;color:var(--cyan);letter-spacing:0.08em;">GUIA TEXTO</div>
+          </div>
+          <div style="background:var(--card2);border:1px solid rgba(34,217,138,0.15);border-radius:8px;padding:20px 28px;text-align:center;width:180px;transform:translateX(16px);">
+            <div style="font-size:24px;margin-bottom:8px;">📸</div>
+            <div style="font-family:var(--font-m);font-size:10px;color:var(--green);letter-spacing:0.08em;">GUIA VISUAL</div>
+          </div>
+          <div style="background:var(--card2);border:1px solid rgba(240,180,41,0.15);border-radius:8px;padding:20px 28px;text-align:center;width:180px;transform:translateX(-8px);">
+            <div style="font-size:24px;margin-bottom:8px;">⚡</div>
+            <div style="font-family:var(--font-m);font-size:10px;color:var(--gold);letter-spacing:0.08em;">100 COMANDOS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ PARA QUEM ══════════ -->
+<section class="who-section">
+  <div class="container">
+    <div class="section-tag">Quem usa o guia</div>
+    <h2 class="section-title" style="margin-bottom:40px;">FEITO PARA QUEM<br>ESTÁ NA OBRA</h2>
+
+    <div class="who-grid">
+      <div class="who-card">
+        <div class="who-emoji">👷</div>
+        <div class="who-title">MESTRE DE OBRAS</div>
+        <div class="who-desc">Calcule com precisão o que o pedreiro pediu, compare traços, dimensione sem depender de engenheiro para cada dúvida.</div>
+        <div class="who-item">Cálculo de materiais por etapa</div>
+        <div class="who-item">Traços de concreto corretos</div>
+        <div class="who-item">Dimensionamento de estrutura</div>
+        <div class="who-item">Resposta às normas ABNT</div>
+      </div>
+      <div class="who-card" style="border-color:rgba(0,212,255,0.15);">
+        <div class="who-emoji">🏠</div>
+        <div class="who-title">DONO DA OBRA</div>
+        <div class="who-desc">Fiscalize cada etapa sem precisar ser técnico. Saiba quando parar, o que verificar e quando chamar reforço.</div>
+        <div class="who-item">Checklists de qualidade por etapa</div>
+        <div class="who-item">Conferência de medição</div>
+        <div class="who-item">Negociação com prestadores</div>
+        <div class="who-item">Diagnóstico de problemas</div>
+      </div>
+      <div class="who-card">
+        <div class="who-emoji">📐</div>
+        <div class="who-title">ENGENHEIRO</div>
+        <div class="who-desc">Otimize o tempo em obra, automatize cálculos repetitivos e use a IA como assistente técnico de plantão.</div>
+        <div class="who-item">Dimensionamentos rápidos</div>
+        <div class="who-item">Memória de cálculo automática</div>
+        <div class="who-item">Templates de tabelas profissionais</div>
+        <div class="who-item">Sugestões de sequência executiva</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DEPOIMENTOS ══════════ -->
+<section class="testi-section">
+  <div class="container">
+    <div class="section-tag">O que dizem quem já usa</div>
+    <h2 class="section-title">RESULTADOS REAIS,<br>EM OBRAS REAIS</h2>
+    <p style="font-size:16px;color:var(--grey2);margin-bottom:48px;">De Manaus a Porto Alegre, quem coloca o guia em prática percebe a diferença na primeira etapa.</p>
+
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"Pedi o cálculo de ferragem para a fundação e comparei com a lista do meu ferreiro. Tinha 180kg a mais na lista dele. Economizei R$1.400 na primeira etapa."</div>
+        <div class="testi-author">
+          <div class="testi-av" style="background:#1A7FFF;">MR</div>
+          <div>
+            <div class="testi-name">Marcos Ribeiro</div>
+            <div class="testi-role">Dono de obra — Goiânia/GO</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card featured">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"Como mestre de obras, eu resolvia tudo no olhômetro. Agora boto o prompt, coloco os dados e tenho a memória de cálculo completa. Nunca mais errei quantidade de tijolo."</div>
+        <div class="testi-author">
+          <div class="testi-av" style="background:rgba(255,255,255,0.2);">JC</div>
+          <div>
+            <div class="testi-name">João Cardoso</div>
+            <div class="testi-role">Mestre de obras — São Paulo/SP</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"Estava com dúvida sobre o telhado e mandei a planta para a IA pelo guia visual. Em minutos tinha a inclinação, quantidade de telhas e os pontos de calha. Incrível."</div>
+        <div class="testi-author">
+          <div class="testi-av" style="background:#7B5EA7;">PS</div>
+          <div>
+            <div class="testi-name">Paulo Santos</div>
+            <div class="testi-role">Engenheiro civil — Curitiba/PR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ GARANTIA ══════════ -->
+<div class="guarantee-strip">
+  <div class="container">
+    <div class="guarantee-inner">
+      <div class="guarantee-badge">
+        <div class="guarantee-num">7</div>
+        <div class="guarantee-days">DIAS</div>
+      </div>
+      <div class="guarantee-text">
+        <h3>GARANTIA TOTAL<br>SEM BUROCRACIA</h3>
+        <p>Testou o guia e não ficou satisfeito em 7 dias? Devolvemos 100% do valor, sem perguntas, sem complicação. Você não tem nada a perder — a não ser os erros na sua obra.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CARRINHO ══════════ -->
+<section class="cart-section" id="preco">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div class="section-tag" style="justify-content:center;margin-bottom:12px;">Monte o seu pedido</div>
+      <h2 class="section-title">ESCOLHA O QUE<br><span style="background:linear-gradient(90deg,var(--cyan),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">FALTA NA SUA OBRA</span></h2>
+      <p style="font-size:15px;color:var(--grey2);max-width:480px;margin:0 auto;line-height:1.6;">Clique para selecionar. Leve 1, 2 ou os 3 — o Pack Completo sai com desconto especial.</p>
+    </div>
+
+    <div class="cart-pulse-banner">
+      <div class="pulse-dot"></div>
+      <div class="pulse-text">👇 <span>Selecione aqui</span> os guias que você quer — 1, 2 ou os 3 com desconto</div>
+      <div class="pulse-arrow">↓</div>
+    </div>
+
+    <div class="cart-grid">
+      <div class="cart-item" data-id="texto" data-price="47" data-name="Guia de Texto" onclick="toggleCart(this)">
+        <div class="cart-item-icon">📋</div>
+        <div class="cart-item-name">GUIA DE PROMPTS DE TEXTO</div>
+        <div class="cart-item-desc">60+ prompts por etapa. Calcule materiais, compare listas, dimensione estruturas e gere checklists com qualquer IA gratuita.</div>
+        <div class="cart-item-price">R$47</div>
+      </div>
+      <div class="cart-item" data-id="visual" data-price="47" data-name="Guia Visual" onclick="toggleCart(this)">
+        <div class="cart-item-icon">📸</div>
+        <div class="cart-item-name">GUIA DE PROMPTS VISUAIS</div>
+        <div class="cart-item-desc">Analise fotos reais da obra, simule cores e revestimentos, transforme esboços em renders e gere relatórios fotográficos.</div>
+        <div class="cart-item-price">R$47</div>
+      </div>
+      <div class="cart-item" data-id="comandos" data-price="47" data-name="100 Comandos" onclick="toggleCart(this)">
+        <div class="cart-item-icon">⚡</div>
+        <div class="cart-item-name">100 COMANDOS PRONTOS</div>
+        <div class="cart-item-desc">O comando certo na hora certa. 100 prompts organizados por etapa da obra, prontos para copiar e usar no campo.</div>
+        <div class="cart-item-price">R$47</div>
+      </div>
+    </div>
+
+    <div class="cart-item pack-card" id="packCard" onclick="selectPack()" style="margin-bottom:28px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <div class="pack-badge">🔥 MELHOR ESCOLHA · ECONOMIZE R$51,10</div>
+        <div class="cart-item-name" style="font-size:16px;padding-right:32px;">PACK COMPLETO — 3 GUIAS + 3 BÔNUS</div>
+        <div class="cart-item-desc" style="margin-bottom:0;">Guia de Texto + Guia Visual + 100 Comandos + todos os bônus exclusivos. Acesso imediato e atualização vitalícia.</div>
+      </div>
+      <div style="flex-shrink:0;text-align:right;">
+        <div style="font-size:12px;color:var(--grey);text-decoration:line-through;font-family:var(--font-m);">R$141</div>
+        <div class="cart-item-price" style="font-size:32px;">R$89,90</div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--grey2);">12x de R$8,49</div>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <div class="cart-summary-left">
+        <div class="cart-label">Seu pedido</div>
+        <div class="cart-items-list" id="cartItemsList"><span class="cart-empty-msg">Nenhum item selecionado ainda ↑</span></div>
+        <div class="cart-total-line" id="cartTotalLine" style="display:none;">
+          <div class="cart-total" id="cartTotal">R$0</div>
+          <div class="cart-savings" id="cartSavings"></div>
+        </div>
+      </div>
+      <div>
+        <a href="#" class="btn-cart" id="btnComprar" target="_blank">COMPRAR AGORA →</a>
+        <div class="cart-hint">🔒 Kiwify · Pagamento seguro</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PREÇO (antigo, oculto) ══════════ -->
+<section class="price-section" id="preco-old" style="display:none;">
+  <div class="container-sm">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div class="section-tag" style="justify-content:center;margin-bottom:12px;">Invista uma vez, use em todas as obras</div>
+      <h2 class="section-title">ACESSO IMEDIATO<br>AOS 3 GUIAS</h2>
+    </div>
+
+    <div class="price-card">
+      <div class="price-card-top">🔥 PACK COMPLETO · OFERTA DE LANÇAMENTO</div>
+      <div class="price-body">
+        <div class="price-de">De R$141,00</div>
+        <div class="price-val"><sup>R$</sup>89,90</div>
+        <div class="price-parcel">ou <strong>12x de R$8,49</strong> sem juros no cartão</div>
+
+        <div class="price-includes">
+          <div class="include-item"><div class="check">✓</div>Guia Completo de Prompts de Texto — 60+ prompts por etapa</div>
+          <div class="include-item"><div class="check">✓</div>Guia de Prompts Visuais — análise de fotos e simulação de acabamentos</div>
+          <div class="include-item"><div class="check">✓</div>100 Comandos Prontos — referência rápida para campo</div>
+          <div class="include-item"><div class="check">✓</div>Bônus: Prompt 0 — O Cérebro da Obra</div>
+          <div class="include-item"><div class="check">✓</div>Bônus: Prompt de Emergência 24h</div>
+          <div class="include-item"><div class="check">✓</div>Bônus: Prompt de Negociação com Prestadores</div>
+          <div class="include-item"><div class="check">✓</div>Atualizações gratuitas para sempre</div>
+        </div>
+
+        <a href="https://pay.kiwify.com.br/J3XBOtN" target="_blank" class="btn-buy">
+          QUERO ACESSO AGORA →
+        </a>
+
+        <div class="price-safe">🔒 Pagamento 100% seguro · Kiwify · Acesso imediato</div>
+
+        <div class="urgency-box">
+          ⚡ <strong>Atenção:</strong> Este preço é exclusivo do lançamento. Após o período promocional, o valor volta ao normal.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FAQ ══════════ -->
+<section class="faq-section">
+  <div class="container-sm">
+    <div class="section-tag" style="margin-bottom:12px;">Dúvidas frequentes</div>
+    <h2 class="section-title" style="margin-bottom:40px;">PERGUNTAS E<br>RESPOSTAS</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Preciso ter conhecimento técnico em construção?
+          <span class="faq-arr">+</span>
+        </div>
+        <div class="faq-a">Não. O guia foi desenvolvido para ser usado por donos de obra leigos e profissionais experientes. Cada prompt já vem com as instruções de como preencher os dados e o que esperar de resposta.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Qual IA devo usar com os prompts?
+          <span class="faq-arr">+</span>
+        </div>
+        <div class="faq-a">O guia funciona com qualquer IA gratuita: ChatGPT, Gemini, Claude, Copilot. Você já tem acesso a todas elas pelo celular ou computador. Não precisa pagar nada extra.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          O guia funciona para obra pequena (casa própria)?
+          <span class="faq-arr">+</span>
+        </div>
+        <div class="faq-a">Sim. Na verdade, é especialmente útil para quem está construindo a casa própria sem equipe técnica. Os prompts de fiscalização foram feitos pensando no dono de obra que quer controlar tudo sem ser engenheiro.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Como recebo o material após a compra?
+          <span class="faq-arr">+</span>
+        </div>
+        <div class="faq-a">O acesso é imediato. Assim que o pagamento for confirmado, você recebe o link por e-mail e pode acessar pelo celular ou computador, direto na plataforma Kiwify.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          O guia de prompts visuais precisa de câmera profissional?
+          <span class="faq-arr">+</span>
+        </div>
+        <div class="faq-a">Não. Qualquer foto tirada com o celular funciona perfeitamente. A IA analisa a imagem e retorna o diagnóstico independente da resolução. Você pode usar no campo mesmo.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          A garantia de 7 dias funciona como?
+          <span class="faq-arr">+</span>
+        </div>
+        <div class="faq-a">Se você comprar e não ficar satisfeito por qualquer motivo nos primeiros 7 dias, basta solicitar o reembolso pelo e-mail de suporte. Devolvemos 100% do valor sem questionamentos, em até 7 dias úteis.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CTA FINAL ══════════ -->
+<section class="final-cta">
+  <div class="container-sm">
+    <h2>SUA PRÓXIMA OBRA<br><span style="background:linear-gradient(90deg,var(--cyan),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">NÃO PRECISA SER ASSIM.</span></h2>
+    <p>Chega de perder dinheiro por errar material, pagar serviço errado ou não saber o que está acontecendo na sua obra. Coloque a IA para trabalhar ao seu lado.</p>
+    <a href="https://pay.kiwify.com.br/J3XBOtN" target="_blank" class="btn-primary" style="font-size:15px;padding:20px 44px;">
+      QUERO OS 3 GUIAS AGORA →
+    </a>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">SUPREMO ALICERCE</div>
+      <div class="footer-links">
+        <a href="#">Termos de Uso</a>
+        <a href="#">Privacidade</a>
+        <a href="#">Suporte</a>
+        <a href="#">Contato</a>
+      </div>
+      <div class="footer-copy">© Supremo Alicerce · A melhor base de tecnologia para construção civil</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════ SCRIPTS ══════════ -->
+<script>
+// ─── FAQ Toggle ───
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ─── Scroll reveal ───
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.stat-item,.pain-card,.stage-row,.bonus-card,.guide-card,.who-card,.testi-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+  obs.observe(el);
+});
+
+// ─── Hero 3D AR: Mouse parallax ───
+const arScene = document.getElementById('arScene');
+const heroSection = document.getElementById('hero');
+
+let mouseX = 0, mouseY = 0;
+let currentX = 0, currentY = 0;
+let rafId = null;
+
+heroSection.addEventListener('mousemove', (e) => {
+  const rect = heroSection.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  mouseX = (e.clientX - cx) / rect.width;
+  mouseY = (e.clientY - cy) / rect.height;
+});
+
+heroSection.addEventListener('mouseleave', () => {
+  mouseX = 0;
+  mouseY = 0;
+});
+
+function animateAR() {
+  currentX += (mouseX - currentX) * 0.06;
+  currentY += (mouseY - currentY) * 0.06;
+  if (arScene) {
+    arScene.style.transform = `
+      rotateY(${currentX * 18}deg)
+      rotateX(${-currentY * 12}deg)
+      rotateZ(${currentX * 2}deg)
+    `;
+  }
+  rafId = requestAnimationFrame(animateAR);
+}
+animateAR();
+
+// ─── Scroll: morph the AR headset ───
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const maxScroll = 600;
+  const prog = Math.min(scrollY / maxScroll, 1);
+
+  if (arScene) {
+    const scale = 1 - prog * 0.2;
+    const tz = prog * 80;
+    arScene.style.transition = 'none';
+    // base transform is the mouse one, but we add scroll effects
+    const tags = document.querySelectorAll('.ar-tag');
+    tags.forEach((tag, i) => {
+      const offset = (i % 2 === 0 ? 1 : -1) * prog * 20;
+      tag.style.transform = `translateY(${offset}px)`;
+      tag.style.opacity = (1 - prog).toString();
+    });
+  }
+});
+
+// ─── Canvas wireframe foundation drawing ───
+function drawFoundation(canvasId, isMirrored) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width;
+  const H = canvas.height;
+
+  let t = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Dark background
+    ctx.fillStyle = 'rgba(0, 6, 20, 0.95)';
+    ctx.fillRect(0, 0, W, H);
+
+    const cx = W / 2;
+    const cy = H / 2;
+    const angle = t * 0.4 + (isMirrored ? Math.PI : 0);
+
+    ctx.save();
+    ctx.translate(cx, cy + 4);
+
+    // Foundation grid (floor)
+    const cos = Math.cos(angle * 0.01);
+    const sin = Math.sin(angle * 0.01);
+
+    // Grid floor perspective
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.15)';
+    ctx.lineWidth = 0.5;
+    for (let i = -3; i <= 3; i++) {
+      // horizontal
+      ctx.beginPath();
+      ctx.moveTo(-50, i * 8 + 12);
+      ctx.lineTo(50, i * 8 + 12);
+      ctx.stroke();
+      // vertical
+      ctx.beginPath();
+      ctx.moveTo(i * 14, -20);
+      ctx.lineTo(i * 14, 28);
+      ctx.stroke();
+    }
+
+    // Main foundation pillars — 3D wireframe
+    const pillars = [
+      [-30, -10],
+      [30, -10],
+      [-30, 10],
+      [30, 10],
+      [0, -10],
+      [0, 10],
+    ];
+
+    const offsetX = Math.sin(t * 0.008) * 2;
+    const offsetY = Math.cos(t * 0.006) * 1.5;
+
+    // Draw base slab
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.7)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.rect(-38, 8, 76, 10);
+    ctx.stroke();
+
+    // Pillars
+    pillars.forEach(([px, py]) => {
+      const x = px + offsetX;
+      const pillarH = 18 + Math.abs(px) * 0.2;
+
+      ctx.strokeStyle = 'rgba(0, 255, 200, 0.6)';
+      ctx.lineWidth = 0.8;
+      // Pillar
+      ctx.beginPath();
+      ctx.rect(x - 2.5, py - pillarH + offsetY, 5, pillarH);
+      ctx.stroke();
+
+      // Footing
+      ctx.strokeStyle = 'rgba(0, 212, 255, 0.8)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.rect(x - 5, py + offsetY, 10, 4);
+      ctx.stroke();
+
+      // Glow dot at base
+      ctx.fillStyle = 'rgba(0, 255, 200, 0.9)';
+      ctx.beginPath();
+      ctx.arc(x, py + 2 + offsetY, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // Beam connecting pillars
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.5)';
+    ctx.lineWidth = 0.8;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(-30 + offsetX, -10 + offsetY - 18);
+    ctx.lineTo(30 + offsetX, -10 + offsetY - 18);
+    ctx.moveTo(-30 + offsetX, 10 + offsetY - 18);
+    ctx.lineTo(30 + offsetX, 10 + offsetY - 18);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Measurement lines
+    const blinkOn = Math.sin(t * 0.05) > 0;
+    if (blinkOn) {
+      ctx.strokeStyle = 'rgba(240, 180, 41, 0.6)';
+      ctx.lineWidth = 0.5;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(-38, -24);
+      ctx.lineTo(38, -24);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = 'rgba(240, 180, 41, 0.8)';
+      ctx.font = '5px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('7.60m', 0, -26);
+    }
+
+    // Animated scanning pulse
+    const pulseY = ((t * 0.5) % 60) - 30;
+    const pulseAlpha = Math.max(0, 0.4 - Math.abs(pulseY) / 60);
+    const grad = ctx.createLinearGradient(-50, pulseY - 1, -50, pulseY + 1);
+    grad.addColorStop(0, 'transparent');
+    grad.addColorStop(0.5, `rgba(0, 255, 200, ${pulseAlpha})`);
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.fillRect(-50, pulseY - 1, 100, 2);
+
+    ctx.restore();
+
+    // Corner crosshairs
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.4)';
+    ctx.lineWidth = 0.8;
+    [[4,4],[W-4,4],[4,H-4],[W-4,H-4]].forEach(([x,y]) => {
+      const s = 5;
+      ctx.beginPath();
+      ctx.moveTo(x - s, y); ctx.lineTo(x + s, y);
+      ctx.moveTo(x, y - s); ctx.lineTo(x, y + s);
+      ctx.stroke();
+    });
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+drawFoundation('lensL', false);
+drawFoundation('lensR', true);
+
+// ─── Scroll to cart and pre-select item ───
+function scrollToCartAndSelect(id) {
+  const section = document.getElementById('preco');
+  if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => {
+    const el = document.querySelector(`[data-id="${id}"]`);
+    if (el && !cartState[id]) toggleCart(el);
+    // Flash highlight
+    if (el) {
+      el.style.transition = 'box-shadow 0.2s';
+      el.style.boxShadow = '0 0 0 3px var(--cyan)';
+      setTimeout(() => { el.style.boxShadow = ''; }, 800);
+    }
+  }, 600);
+}
+
+// ─── CART LOGIC ───
+const LINKS = {
+  1: 'https://pay.kiwify.com.br/utY7Mdy',
+  2: 'https://pay.kiwify.com.br/KCKMEpx',
+  3: 'https://pay.kiwify.com.br/J3XBOtN'
+};
+
+let cartState = { texto: false, visual: false, comandos: false, pack: false };
+
+function updateCartUI() {
+  const items = [];
+  let total = 0;
+  let savings = '';
+  let qtySelected = 0;
+
+  if (cartState.pack) {
+    items.push('Pack Completo (3 Guias + Bônus)');
+    total = 89.90;
+    savings = 'Economizando R$51,10';
+    qtySelected = 3;
+  } else {
+    if (cartState.texto)    items.push('Guia de Texto');
+    if (cartState.visual)   items.push('Guia Visual');
+    if (cartState.comandos) items.push('100 Comandos');
+    qtySelected = items.length;
+    if (qtySelected === 1) { total = 47;    savings = ''; }
+    if (qtySelected === 2) { total = 69.90; savings = 'Economizando R$24,10'; }
+    if (qtySelected === 3) { total = 89.90; savings = 'Desconto de pack aplicado! Economize R$51,10'; }
+  }
+
+  const listEl    = document.getElementById('cartItemsList');
+  const totalEl   = document.getElementById('cartTotal');
+  const savEl     = document.getElementById('cartSavings');
+  const totalLine = document.getElementById('cartTotalLine');
+  const btn       = document.getElementById('btnComprar');
+
+  if (items.length === 0) {
+    listEl.innerHTML = '<span class="cart-empty-msg">Nenhum item selecionado ainda ↑</span>';
+    totalLine.style.display = 'none';
+    btn.classList.remove('active');
+    btn.href = '#';
+  } else {
+    listEl.innerHTML = items.map(i => `<span style="display:inline-block;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:3px;padding:2px 8px;margin:2px 4px 2px 0;font-size:11px;font-family:var(--font-m);color:var(--cyan);">${i}</span>`).join('');
+    totalLine.style.display = 'flex';
+    totalEl.textContent = 'R$' + (Number.isInteger(total) ? total : total.toFixed(2).replace('.',','));
+    savEl.textContent = savings;
+    btn.classList.add('active');
+    btn.href = LINKS[qtySelected] || LINKS[3];
+  }
+}
+
+function toggleCart(el) {
+  const id = el.dataset.id;
+  // Deselect pack if individual item toggled
+  if (cartState.pack) {
+    cartState.pack = false;
+    document.getElementById('packCard').classList.remove('selected');
+  }
+  cartState[id] = !cartState[id];
+  el.classList.toggle('selected', cartState[id]);
+  // If all 3 now selected, auto-select pack visual too
+  if (cartState.texto && cartState.visual && cartState.comandos) {
+    document.getElementById('packCard').classList.add('selected');
+  } else {
+    document.getElementById('packCard').classList.remove('selected');
+  }
+  updateCartUI();
+}
+
+function selectPack() {
+  const pack = document.getElementById('packCard');
+  const wasSelected = cartState.pack;
+  // Deselect all individuals
+  ['texto','visual','comandos'].forEach(id => {
+    cartState[id] = false;
+    const el = document.querySelector(`[data-id="${id}"]`);
+    if (el) el.classList.remove('selected');
+  });
+  cartState.pack = !wasSelected;
+  pack.classList.toggle('selected', cartState.pack);
+  updateCartUI();
+}
+
+// ─── Particles in hero ───
+const heroEl = document.getElementById('heroVisual');
+if (heroEl) {
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const dx = (Math.random() - 0.5) * 200;
+    const dy = (Math.random() - 0.5) * 200;
+    p.style.setProperty('--dx', dx + 'px');
+    p.style.setProperty('--dy', dy + 'px');
+    p.style.left = (20 + Math.random() * 60) + '%';
+    p.style.top = (20 + Math.random() * 60) + '%';
+    p.style.animationDelay = (Math.random() * 6) + 's';
+    p.style.animationDuration = (4 + Math.random() * 4) + 's';
+    heroEl.appendChild(p);
+  }
+}
+</script>
+</body>
+</html>
